@@ -5,73 +5,307 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style2.css">
-  <link rel="stylesheet" href="style.css">
-  <title>Ejemplo</title>
-  <style>
-    *{
-      border: 1px solid orange;
-    }
-    p{
-      color: cornflowerblue;
-    }
-
-    .grande{
-      font-size: 10vw;
-    }
-
-    .grande:hover{
-      color: darkgreen;
-      cursor: pointer;
-    }
-
-    #p2{
-      text-decoration: underline;
-    }
-
-    div p.rojo{
-      color: red;
-    }
-
-    h1{
-      color: aqua;
-    }
-
-    img{
-      width: 100%;
-    }
-
-  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <title>Pokedex</title>
 </head>
 
 <body>
-  <h1 style="color: burlywood;">Titulo</h1>
-  <p class="grande">Parrafo</p>
-  <p id="p2">PArrafo 2</p>
-  <hr>
-  <div style="width: 50%;">
-    <img src="banner.png" alt="Casa en la playa">
-  </div>
-  <hr>
-  <a class="grande" href="https://www.youtube.com/watch?v=bBEgtDGkUto" target="_blank" rel="noopener noreferrer">La Capital</a>
-  <hr>
-  <iframe width="560" height="315" src="https://www.youtube.com/embed/bBEgtDGkUto" title="YouTube video player"
-    frameborder="0"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    allowfullscreen></iframe>
+  <nav class="navbar" role="navigation" aria-label="main navigation" style="background-color: #786A9E;">
+    <div id="navbarBasicExample" class="navbar-menu">
+      <div class="navbar-start">
+        <a class="navbar-item">
+          Home
+        </a>
+      </div>
 
-  <div>
-    <span>
-      <p>hola
-        <div>
-          <p class="rojo">Hola</p>
+      <div class="navbar-end">
+        <div class="navbar-item">
+          <div class="buttons">
+            <a class="button is-primary">
+              <strong>Sign up</strong>
+            </a>
+          </div>
         </div>
-      </p>
-    </span>
-  </div>
+      </div>
+    </div>
+  </nav>
+  <section class="section has-text-centered">
+    <h1 class="title">Pokédex</h1>
+    <p class="subtitle" style="color: #786A9E;">Realiza la busqueda de pokemons por nombre o por número</p>
+    <div class="columns">
+      <div class="column is-offset-3 is-6">
+        <div class="field">
+          <div class="field">
+            <p class="control has-icons-left">
+              <input id="Buscador" class="input" type="text" onchange="FiltradoBusqueda()" placeholder="Busqueda">
+              <span class="icon is-small is-left">
+                <ion-icon name="search-outline"></ion-icon>
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="column is-1">
+        <button class="js-modal-trigger button is-primary" data-target="modal-js-example"
+          onclick="openModal()">Agregar</button>
+      </div>
+    </div>
+  </section>
+  <section class="section px-6">
+    <div class="columns">
+      <div class="column is-offset-1 is-10" style="border: solid #786A9E 2px; border-radius: 20px;">
+        <div id="pokemon" class="columns is-multiline is-mobile">
 
-  <input type="text">
-  <textarea name="" id="" cols="30" rows="10"></textarea>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="modal-js-example" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Agregar Nuevo Pokemon</p>
+        <button class="delete" aria-label="close" onclick="closeModal()"></button>
+      </header>
+      <section class="modal-card-body">
+        <input id="pNombre" class="input" type="text" placeholder="Nombre">
+        <input id="pNumero" class="input" type="text" placeholder="Número">
+        <input id="pUrl" class="input" type="text" placeholder="Imagen">
+        <input id="pTipos" class="input" type="text" placeholder="Tipos separado por ,">
+      </section>
+      <footer class="modal-card-foot">
+        <button class="button is-success" onclick="saveNewPokemon()">Guardar</button>
+        <button class="button is-danger" onclick="closeModal()">Cancelar</button>
+      </footer>
+    </div>
+  </div>
 </body>
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+<script>
+  /*MODAL OPEN CLOSE FUNCTIONS*/
+  function openModal() {
+    const element = document.getElementById('modal-js-example');
+    element.classList.add('is-active');
+  }
+
+  function closeModal() {
+    const element = document.getElementById('modal-js-example');
+    element.classList.remove('is-active');
+  }
+
+  let selectedPokemonNumber = 0;
+  //let pokemons = ["Charmander", "Charmeleon", "Charizard", "Machop", "Machoke", "Machamp"];
+
+  // let pokemonObjs = [
+  //   {
+  //     name: "Bulbasaur",
+  //     number: 1,
+  //     image: 'https://assets.pokemon.com/assets/cms2/img/pokedex/full/001.png',
+  //     types: ["Planta", "Veneno"]
+  //   },
+  //   {
+  //     name: "Bulbasaur",
+  //     number: 2,
+  //     image: 'https://assets.pokemon.com/assets/cms2/img/pokedex/full/002.png',
+  //     types: ["Planta", "Veneno"]
+  //   },
+  //   {
+  //     name: "Venusaur",
+  //     number: 3,
+  //     image: 'https://assets.pokemon.com/assets/cms2/img/pokedex/full/003.png',
+  //     types: ["Planta", "Veneno"]
+  //   },
+  //   {
+  //     name: "Charmander",
+  //     number: 4,
+  //     image: 'https://assets.pokemon.com/assets/cms2/img/pokedex/full/004.png',
+  //     types: ["Fuego"]
+  //   },
+  //   {
+  //     name: "Charmeleon",
+  //     number: 5,
+  //     image: 'https://assets.pokemon.com/assets/cms2/img/pokedex/full/005.png',
+  //     types: ["Fuego"]
+  //   },
+  //   {
+  //     name: "Charizard",
+  //     number: 6,
+  //     image: 'https://assets.pokemon.com/assets/cms2/img/pokedex/full/006.png',
+  //     types: ["Fuego", "Volador"]
+  //   },
+  //   {
+  //     name: "Squirtle",
+  //     number: 7,
+  //     image: 'https://assets.pokemon.com/assets/cms2/img/pokedex/full/007.png',
+  //     types: ["Agua"]
+  //   },
+  //   {
+  //     name: "Wartortle",
+  //     number: 8,
+  //     image: 'https://assets.pokemon.com/assets/cms2/img/pokedex/full/008.png',
+  //     types: ["Agua"]
+  //   },
+  //   {
+  //     name: "Blastoise",
+  //     number: 9,
+  //     image: 'https://assets.pokemon.com/assets/cms2/img/pokedex/full/009.png',
+  //     types: ["Agua"]
+  //   },
+  //   {
+  //     name: "Caterpie",
+  //     number: 10,
+  //     image: 'https://assets.pokemon.com/assets/cms2/img/pokedex/full/010.png',
+  //     types: ["Bicho"]
+  //   },
+  // ];
+
+  //localStorage.setItem("pokemons", JSON.stringify(pokemonObjs));
+  let pokemonObjs = JSON.parse(localStorage.getItem("pokemons"));
+  let pokemonsFiltrados = [];
+
+  function saveNewPokemon() {
+    const name = document.getElementById('pNombre').value;
+    const num = document.getElementById('pNumero').value;
+    const url = document.getElementById('pUrl').value;
+    const types = document.getElementById('pTipos').value;
+
+    const p = SelectedPokemon(selectedPokemonNumber);
+    if (p.length > 0) {
+      pokemonObjs.forEach(element => {
+        if (element.number == selectedPokemonNumber) {
+          element.name = name;
+          element.number = num;
+          element.image = url;
+          element.types = types;
+        }
+      });
+    } else {
+      pokemonObjs.push(
+        {
+          name: name,
+          number: +num,
+          image: url,
+          types: types.split(",")
+        }
+      );
+
+    }
+    //save
+    localStorage.setItem("pokemons", JSON.stringify(pokemonObjs));
+    //close modal
+    closeModal();
+    //reload data from grid
+    FiltradoBusqueda()();
+  }
+
+  function updatePokemonInfo(num) {
+    const p = SelectedPokemon(num)[0];
+    selectedPokemonNumber = num;
+    openModal();
+    document.getElementById('pNombre').value = p.name;
+    document.getElementById('pNumero').value = p.number;
+    document.getElementById('pUrl').value = p.image;
+    document.getElementById('pTipos').value = p.types;
+  }
+
+  function deletePokemon(num) {
+    let tempPkmArray = [];
+    pokemonObjs.forEach(element => {
+      if (element.number != num) {
+        tempPkmArray.push(element);
+      }
+    });
+
+    pokemonObjs = tempPkmArray;
+
+    localStorage.setItem("pokemons", JSON.stringify(pokemonObjs));
+    //reload data from grid
+    FiltradoBusqueda();
+  }
+
+  function FiltradoBusqueda() {
+    console.log('searching');
+    pokemonsFiltrados = [];
+    const textoBusqueda = document.getElementById('Buscador').value;
+    console.log(textoBusqueda)
+    if (textoBusqueda == "") {
+      pokemonsFiltrados = pokemonObjs;
+    } else {
+      pokemonObjs.forEach(element => {
+        if (element.name.toLowerCase().includes(textoBusqueda.toLowerCase()) || element.number == +textoBusqueda) {
+          pokemonsFiltrados.push(element);
+        }
+      });
+    }
+
+    PrintPokemons();
+  }
+
+  function PrintPokemons() {
+    const divHTML = document.getElementById('pokemon');
+    divHTML.innerHTML = '';
+    pokemonsFiltrados.forEach(element => {
+      //divHTML.innerHTML += "<p onclick='SelectedPokemon(" + element.number + ")'>" + element.name + "</p>";
+      divHTML.innerHTML += '<div class="column is-one-fifth">' +
+        '<div class="card">' +
+        '<div class="card-image">' +
+        '<figure class="image is-4by3">' +
+        '<img src="' + element.image + '" alt="Placeholder image">' +
+        '</figure>' +
+        '</div>' +
+        '<div class="card-content" >' +
+        '<div class="media">' +
+        '<div class="media-content">' +
+        '<p class="title is-4">' + element.name + '</p>' +
+        '<p class="subtitle is-6 m-0">Types: ' + element.types + ' </p>' +
+        '<p class="sutitle is-6">No. ' + element.number + '</p>' +
+        '<button class="button is-warning" onclick="updatePokemonInfo(' + element.number + ')">Editar</button>' +
+        '<button class="button is-danger" onclick="deletePokemon(' + element.number + ')">Borrar</button>' +
+        '</div>' +
+        '</div>' +
+        '</div>' +
+        '</div>' +
+        '</div>';
+    });
+  }
+
+  function GetPokemonAPI() {
+    pokemonObjs = [];
+    var result = fetch('https://www.pokemon.com/el/api/pokedex/kalos')
+      .then(response => response.json())
+      .then(json => {
+        console.log(json);
+
+        json.forEach(element => {
+          pokemonObjs.push(
+            {
+              name: element.name,
+              number: element.id,
+              image: element.ThumbnailImage,
+              types: element.type
+            }
+          );
+        });
+
+        PrintPokemons();
+      })
+  }
+
+  function SelectedPokemon(pokemonNumber) {
+    const p = pokemonObjs.filter((elemento) => {
+      if (elemento.number === pokemonNumber) {
+        return true;
+      }
+      return false;
+    });
+
+    console.log('pokemonEncontrado', p);
+    return p;
+  }
+
+  FiltradoBusqueda();
+</script>
 
 </html>
