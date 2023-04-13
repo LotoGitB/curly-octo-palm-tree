@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <h1>Hola</h1>
+</body>
+<script>
+  //var edad = 30;
+  const llantas = 4;
+  let ventas = 5;
+  const saludo = 'Hola';
+  let isFull = false;
+
+  // alert("Hello World");
+  // console.log(llantas, ventas, saludo, isFull);
+
+  // let person = prompt("Please enter your name", "Harry Potter");
+  // document.write("Nombre: " + person);
+  //console.log(saludo + " " + llantas);
+  //var edad = '30';
+
+  const a = 9;
+  const b = 19;
+  const c = 20;
+
+  if (a > b && a > c) {
+    console.log("Es mayor a");
+  } else if (b > c) {
+    console.log("Es mayor b");
+  } else {
+    console.log("Es mayor c");
+  }
+
+  const ciudad = "Leon de los Aldama";
+  for (let index = 0; index < ciudad.length; index++) {
+    //console.log(ciudad[index]);
+    if (ciudad[index].toLowerCase() == 'a') {
+      console.log('letra a encontrada');
+    }
+  }
+
+  //Objetos
+  const juego1 = {
+    nombre: 'MarioKart8',
+    consola: 'Nintendo Switch',
+    calificacion: 'E',
+    numeroJugadores: 4,
+    online: true
+  };
+
+  const juego2 = {
+    nombre: 'MarioKart8',
+    consola: 'Nintendo Switch',
+    calificacion: 'E',
+    numeroJugadores: 2,
+    online: true
+  };
+
+
+  let rect = new Rectangulo(10, 20, 'rojo');
+  console.log(rect.getArea());
+
+  rect.multiplicarAltura(5);
+
+  //
+  class Rectangulo {
+
+    constructor(alto, ancho, color) {
+      // Con la palabra `this` se hace referencia al ámbito de la clase
+      // Las propiedades `alto` y `ancho` representan el estado de la clase
+      this.alto = alto;
+      this.ancho = ancho;
+      this.color = color;
+    }
+
+    // Getter (encapsulamiento)
+    getArea() {
+      return this.calcularArea();
+    }
+
+    // Método, comportamiento de la clase
+    calcularArea() {
+      return this.alto * this.ancho;
+    }
+
+    // Método, comportamiento de la clase
+    multiplicarAltura(multiplica) {
+      return this.alto * multiplica / 5;
+    }
+
+
+  };
+
+
+</script>
+
+</html>
